@@ -7,7 +7,10 @@ export const getAllNetworks= async(): Promise< networkInfo[]> =>{
         let response = await (await fetch(uri)).json();
         let networkDetails: networkInfo[] = [];
         for (const [, value] of Object.entries(response)){
-            networkDetails.push(value as networkInfo);
+            let netWorkValue = value as networkInfo;
+            if((netWorkValue.tokenDecimals && netWorkValue.tokenDecimals?.length >0) && (netWorkValue.tokenSymbol && netWorkValue.tokenSymbol?.length > 0)){
+                networkDetails.push(value as networkInfo);
+            }
         }
         return networkDetails;
     }
