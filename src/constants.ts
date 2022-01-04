@@ -6,7 +6,8 @@ export const intialContext:context = {
     setNetworkResponseInfo : ():void=>{
         throw new Error('setContext function must be overridden');
     },
-    isLoading :true
+    isLoading :true,
+    isError : false
 }
 
 export const iconBaseUri = "https://sub.id/images/";

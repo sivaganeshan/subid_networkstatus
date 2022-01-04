@@ -3,6 +3,7 @@ import {  Dispatch, SetStateAction } from 'react';
 export type context = {
     networkDetails : networkInfo[],
     isLoading :boolean,
+    isError:boolean,
     setNetworkResponseInfo: Dispatch<SetStateAction<context>>;
 }
 

@@ -1,58 +1,94 @@
-import { useContext , useEffect} from "react";
+import { useContext, useEffect } from "react";
 import { NetworkContext } from "../NetworkContext";
 import { getAllNetworks, getNetworkStatus } from "../httpHelper";
 import Loading from "./Loading";
-import {intialContext} from "../constants";
+import { intialContext } from "../constants";
 import NetworkElement from "./NetworkElement";
 import NetworkEleWrapper from "../styles/NetworkEle.styles";
 import HeaderWrapper from "../styles/Header.styles";
 import Header from "./Header";
+import ErrorWrapper from "../styles/Error.styles";
+import Error from "./Error"
 
 
-const NetworkGroup :React.FC = () =>{
+const NetworkGroup: React.FC = () => {
+  let { isLoading, setNetworkResponseInfo, isError } =
+    useContext(NetworkContext);
 
-    let {isLoading, setNetworkResponseInfo }= useContext(NetworkContext);
+  useEffect(() => {
+    async function getRequiredDetails() {
+      try {
+        let networkInfo = await getAllNetworks();
+        setNetworkResponseInfo({
+          networkDetails: networkInfo,
+          isLoading: false,
+          isError: false,
+          setNetworkResponseInfo: (): void => {},
+        });
 
-    useEffect(()=>{
-        async function getRequiredDetails(){
-          let networkInfo = await getAllNetworks();
-          setNetworkResponseInfo({networkDetails:networkInfo, isLoading:false , setNetworkResponseInfo:():void=>{}});
-          //let updateNetworkinfo = ...networkInfo;
-          networkInfo.map(async (network) =>{
-              if(network.networkName){
-                let networkStatus = await getNetworkStatus(network.networkName);
-                network.connectedStatus = networkStatus;
-              }
-              setNetworkResponseInfo({networkDetails:networkInfo, isLoading:false , setNetworkResponseInfo:():void=>{}});
-          })
-        }
-        getRequiredDetails();
+        networkInfo.map(async (network) => {
+          if (network.networkName) {
+            let networkStatus = await getNetworkStatus(network.networkName);
+            network.connectedStatus = networkStatus;
+          }
+          setNetworkResponseInfo({
+            networkDetails: networkInfo,
+            isLoading: false,
+            isError: false,
+            setNetworkResponseInfo: (): void => {},
+          });
+        });
+      } catch (ex: any) {
+        setNetworkResponseInfo({
+          networkDetails: intialContext.networkDetails,
+          isLoading: false,
+          isError: true,
+          setNetworkResponseInfo: (): void => {},
+        });
+      }
+    }
+    getRequiredDetails();
 
-        const callOncefiveMinutes = setInterval(()=>{
-            console.log("setinterval called");
-            setNetworkResponseInfo({networkDetails:intialContext.networkDetails , isLoading:true , setNetworkResponseInfo:():void=>{}});
-            getRequiredDetails()
-        },300000);
+    const callOncefiveMinutes = setInterval(() => {
+      console.log("setinterval called");
+      setNetworkResponseInfo({
+        networkDetails: intialContext.networkDetails,
+        isError: false,
+        isLoading: true,
+        setNetworkResponseInfo: (): void => {},
+      });
+      getRequiredDetails();
+    }, 300000);
 
-        return ()=> clearInterval(callOncefiveMinutes);
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, []);
+    return () => clearInterval(callOncefiveMinutes);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    return(
-        <div>
-            {isLoading && <Loading />}
-            {!isLoading && 
-            <>
-            <HeaderWrapper>
-                <Header />
-            </HeaderWrapper>
+  return (
+      <>
+    <div>
+      {isLoading && <Loading />}
+      {isError && 
+      (<>
+        <ErrorWrapper>
+            <Error />
+        </ErrorWrapper>
+      </>)}
+      {!isLoading && !isError && (
+        <>
+          <HeaderWrapper>
+            <Header />
+          </HeaderWrapper>
 
-            <NetworkEleWrapper>
-                    <NetworkElement />
-            </NetworkEleWrapper>
-            </> }
-        </div>
-    )
+          <NetworkEleWrapper>
+            <NetworkElement />
+          </NetworkEleWrapper>
+        </>
+      )}
+    </div>
+    
+    </>
+  );
 };
 
 export default NetworkGroup;
