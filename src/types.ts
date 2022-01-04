@@ -13,8 +13,10 @@ export type networkInfo = {
     tokenDecimals?:number[],
     nativeToken?:  string,
     connectedStatus?: boolean,
-    ss58Format?: number
+    ss58Format?: number,
+    networkName?:string
 }
+
 
 
 

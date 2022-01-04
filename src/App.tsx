@@ -1,13 +1,14 @@
 
-import  NetworkEle  from "./components/NetworkEle";
+import { CssBaseline } from "@mui/material";
+import  NetworkGroup  from "./components/NetworkGroup";
 import { NetWorkProvider } from "./NetworkContext";
 
 function App() {
   return (
     <NetWorkProvider>
       <div className="App">
-        <h4>All Network Details</h4>
-        <NetworkEle></NetworkEle>
+        <CssBaseline />
+        <NetworkGroup></NetworkGroup>
       </div>
     </NetWorkProvider>
   );

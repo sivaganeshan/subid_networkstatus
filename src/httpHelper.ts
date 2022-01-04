@@ -1,13 +1,14 @@
 import { networkInfo } from "./types";
+import {getAllNetworkBaseUri, getNetworkStatusUri} from "./constants";
 
 export const getAllNetworks= async(): Promise< networkInfo[]> =>{
     
     try{
-        let uri = "https://app.subsocial.network/subid/api/v1/chains/properties";
-        let response = await (await fetch(uri)).json();
+        let response = await (await fetch(getAllNetworkBaseUri)).json();
         let networkDetails: networkInfo[] = [];
-        for (const [, value] of Object.entries(response)){
+        for (const [key, value] of Object.entries(response)){
             let netWorkValue = value as networkInfo;
+            netWorkValue.networkName=key;
             if((netWorkValue.tokenDecimals && netWorkValue.tokenDecimals?.length >0) && (netWorkValue.tokenSymbol && netWorkValue.tokenSymbol?.length > 0)){
                 networkDetails.push(value as networkInfo);
             }
@@ -22,12 +23,12 @@ export const getAllNetworks= async(): Promise< networkInfo[]> =>{
 
 export const getNetworkStatus = async(networkName:string):Promise<boolean> => {
     try{
-        let uri = "https://app.subsocial.network/subid/api/v1/check/";
-        let response = await (await fetch(uri+networkName)).text() === 'true';
+
+        let response = await (await fetch(getNetworkStatusUri+networkName)).text() === 'true';
         return response;
     }
     catch(ex:any){
-        console.error("Error in get All Networks : ", ex.message);
+        console.error("Error in getNetworkStatus : ", networkName,  ex.message);
         throw ex.message;
     }
 
