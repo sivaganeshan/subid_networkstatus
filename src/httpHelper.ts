@@ -21,7 +21,7 @@ export const getAllNetworks= async(): Promise< networkInfo[]> =>{
     }
 }
 
-export const getNetworkStatus = async(networkName:string):Promise<boolean> => {
+export const getNetworkStatus = async(networkName:string):Promise<boolean|undefined> => {
     try{
 
         let response = await (await fetch(getNetworkStatusUri+networkName)).text() === 'true';
@@ -29,7 +29,6 @@ export const getNetworkStatus = async(networkName:string):Promise<boolean> => {
     }
     catch(ex:any){
         console.error("Error in getNetworkStatus : ", networkName,  ex.message);
-        throw ex.message;
     }
-
+    return undefined;
 }

@@ -18,6 +18,10 @@ export type networkInfo = {
     networkName?:string
 }
 
+export type ConnectedStatus ={
+    status: boolean|undefined
+}
+
 
 
 
