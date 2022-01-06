@@ -26,18 +26,22 @@ const NetworkGroup: React.FC = () => {
           setNetworkResponseInfo: (): void => {},
         });
 
-        networkInfo.map(async (network) => {
+        let networkInfoPromises = networkInfo.map(async (network) => {
           if (network.networkName) {
             let networkStatus = await getNetworkStatus(network.networkName);
             network.connectedStatus = networkStatus;
           }
-          setNetworkResponseInfo({
-            networkDetails: networkInfo,
+          return network;
+        });
+
+        let networkDetailsInfo = (await Promise.all(networkInfoPromises)).filter(x=> !!x);
+
+        setNetworkResponseInfo({
+            networkDetails: networkDetailsInfo,
             isLoading: false,
             isError: false,
             setNetworkResponseInfo: (): void => {},
           });
-        });
       } catch (ex: any) {
         setNetworkResponseInfo({
           networkDetails: intialContext.networkDetails,
