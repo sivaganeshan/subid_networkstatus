@@ -19,12 +19,12 @@ const NetworkGroup: React.FC = () => {
     async function getRequiredDetails() {
       try {
         let networkInfo = await getAllNetworks();
-        // setNetworkResponseInfo({
-        //   networkDetails: networkInfo,
-        //   isLoading: false,
-        //   isError: false,
-        //   setNetworkResponseInfo: (): void => {},
-        // });
+        setNetworkResponseInfo({
+          networkDetails: networkInfo,
+          isLoading: false,
+          isError: false,
+          setNetworkResponseInfo: (): void => {},
+        });
 
         let networkInfoPromises = networkInfo.map(async (network) => {
           if (network.networkName) {
