@@ -5,7 +5,7 @@ import { ConnectedStatus } from '../types';
 const NetworkEleWrapper = styled.div`
 .parent{
     display:flex;
-    flex-directio:row;
+    flex-direction:row;
     flex-wrap: wrap;
     margin:2rem
 }
