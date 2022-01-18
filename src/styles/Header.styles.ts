@@ -3,7 +3,7 @@ import styled from  'styled-components';
 const HeaderWrapper = styled.div`
 .appbar{
     display:flex;
-    flex-directio:column;
+    flex-direction:column;
     flex-wrap: wrap;
     justify-content: center;
     align-items:center;
